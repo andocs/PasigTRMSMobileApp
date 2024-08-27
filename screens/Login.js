@@ -33,7 +33,7 @@ const Login = ({ onUserLogin }) => {
     setLoading(true); // Start loading
     try {
       const response = await fetch(
-        "http://pasigtrms.great-site.net/mobile/login.php",
+        "https://pasigtrms.great-site.net/mobile/login.php",
         {
           method: "POST",
           headers: {
