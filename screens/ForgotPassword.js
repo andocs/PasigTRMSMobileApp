@@ -1,5 +1,14 @@
 import { useState } from "react";
-import { StyleSheet, View, Image, Alert, Text } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Image,
+  Alert,
+  Text,
+  Dimensions,
+  SafeAreaView,
+  StatusBar,
+} from "react-native";
 import { Padding, Color, FontSize, FontFamily } from "../GlobalStyles";
 
 import CustomInput from "../components/CustomInput";
@@ -7,11 +16,13 @@ import IndexFooter from "../components/IndexFooter";
 import HeaderBack from "../components/HeaderBack";
 import PrimaryButton from "../components/PrimaryButton";
 
+const logoSize = (Dimensions.get("window").height / 100) * 15;
+
 const ForgotPassword = ({ route }) => {
   const { userid } = route.params; // Get userid from route params
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  console.log(userid);
+  const [loading, setLoading] = useState(false); // State for loading
 
   const handleSubmit = async () => {
     if (newPassword !== confirmPassword) {
@@ -22,7 +33,7 @@ const ForgotPassword = ({ route }) => {
     // Send the new password to the server
     try {
       const response = await fetch(
-        "http://192.168.1.8/pasigtrms/mobile/reset_password.php", // Adjust the endpoint URL as needed
+        "http://pasigtrms.great-site.net/mobile/reset_password.php", // Adjust the endpoint URL as needed
         {
           method: "POST",
           body: JSON.stringify({ userid, password: newPassword }),
@@ -40,12 +51,14 @@ const ForgotPassword = ({ route }) => {
         Alert.alert("Error", result.message);
       }
     } catch (error) {
-      console.log(error);
       Alert.alert("Error", "An error occurred. Please try again.");
+    } finally {
+      setLoading(false); // Set loading to false after process completes
     }
   };
   return (
-    <View style={styles.forgotPassword}>
+    <SafeAreaView style={styles.forgotPassword}>
+      <StatusBar hidden={true} />
       <HeaderBack />
       <View style={styles.body}>
         <View style={[styles.logoContainer, styles.flexBox]}>
@@ -71,12 +84,12 @@ const ForgotPassword = ({ route }) => {
             />
           </View>
           <View style={styles.buttonContainer}>
-            <PrimaryButton onPress={handleSubmit} text={"SUBMIT"} />
+            <PrimaryButton onPress={handleSubmit} text={"SUBMIT"} loading={loading} />
           </View>
         </View>
       </View>
       <IndexFooter />
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -130,8 +143,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   pasigLogo: {
-    height: "100%",
-    width: "100%",
+    height: logoSize,
+    width: logoSize,
     resizeMode: "contain",
   },
 });

@@ -12,19 +12,19 @@ const MainContainer = () => {
       <View style={[styles.quickActionContainer, styles.containerFlexBox]}>
         <View style={styles.rowContainer}>
           <QuickActionButton
-            icon={require("../assets/images/bus-terminal.svg")}
+            icon={require("../assets/images/bus-terminal.png")}
             text={"Terminals"}
             onPress={() => navigation.navigate("TerminalTab")}
           />
           <QuickActionButton
-            icon={require("../assets/images/route-locator.svg")}
+            icon={require("../assets/images/route-locator.png")}
             text={"Routes"}
             onPress={() => navigation.navigate("RoutesTab")}
           />
         </View>
         <View style={styles.rowContainer}>
           <QuickActionButton
-            icon={require("../assets/images/qr-code.svg")}
+            icon={require("../assets/images/qr-code.png")}
             text={"QR Code"}
             onPress={() => navigation.navigate("QRTab")}
           />

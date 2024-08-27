@@ -1,26 +1,41 @@
 import React from "react";
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  Alert,
+  SafeAreaView,
+  StatusBar,
+} from "react-native";
 import { Color, FontSize, FontFamily, Padding, Border } from "../GlobalStyles";
+
 import Header from "../components/Header";
 import UpdateInformation from "../components/UpdateInformation";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const ProfileTab = ({ user }) => {
+const ProfileTab = ({ user, onLogout }) => {
   const handleLogout = async () => {
     try {
-      const response = await fetch("http://192.168.1.8/pasigtrms/mobile/logout.php", {
-        method: "POST",
-      });
+      const response = await fetch(
+        "http://pasigtrms.great-site.net/mobile/logout.php",
+        {
+          method: "POST",
+          body: JSON.stringify({ userid: user.userid }),
+        }
+      );
       const result = await response.json();
+
       if (result.success) {
         console.log(result.message);
         await AsyncStorage.removeItem("userInfo");
-        navigation.navigate("LandingScreen");
+        onLogout(); // Call the onLogout prop to reset navigation
       } else {
         console.error(result.message);
       }
     } catch (error) {
-      console.error("Logout error:", error);
+      Alert.alert("Logout error", error.message);
     }
   };
 
@@ -30,7 +45,8 @@ const ProfileTab = ({ user }) => {
   };
 
   return (
-    <View style={styles.profileTab}>
+    <SafeAreaView style={styles.profileTab}>
+      <StatusBar hidden={true} />
       <Header title={"PROFILE"} />
       <View style={[styles.body, styles.bodyFlexBox]}>
         <View style={styles.profileContainer}>
@@ -55,7 +71,7 @@ const ProfileTab = ({ user }) => {
                 <Image
                   style={styles.emailIcon}
                   contentFit="cover"
-                  source={require("../assets/images/email-outlined.svg")}
+                  source={require("../assets/images/email-outlined.png")}
                 />
               </View>
               <Text style={styles.details}>
@@ -69,7 +85,7 @@ const ProfileTab = ({ user }) => {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

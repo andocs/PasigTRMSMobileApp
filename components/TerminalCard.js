@@ -12,7 +12,7 @@ const TerminalCard = ({
     <View style={styles.container}>
       <View style={styles.detailsContainer}>
         <Image
-          source={require("../assets/images/terminal.svg")}
+          source={require("../assets/images/terminal.png")}
           style={styles.icon}
         />
         <Text style={styles.terminalName}>{terminalName}</Text>
@@ -21,7 +21,7 @@ const TerminalCard = ({
         <Text style={styles.label}>Address</Text>
         <View style={styles.detailsContainer}>
           <Image
-            source={require("../assets/images/terminal-address.svg")}
+            source={require("../assets/images/terminal-address.png")}
             style={styles.detailsIcon}
           />
           <Text style={styles.terminalAddress}>{terminalAddress}</Text>
@@ -29,7 +29,7 @@ const TerminalCard = ({
         <Text style={styles.label}>Route Line</Text>
         <View style={styles.detailsContainer}>
           <Image
-            source={require("../assets/images/route.svg")}
+            source={require("../assets/images/route.png")}
             style={styles.detailsIcon}
           />
           <Text style={styles.routeLine}>{routeLine}</Text>
@@ -37,7 +37,7 @@ const TerminalCard = ({
         <Text style={styles.label}>Group</Text>
         <View style={styles.detailsContainer}>
           <Image
-            source={require("../assets/images/group.svg")}
+            source={require("../assets/images/group.png")}
             style={styles.detailsIcon}
           />
           <Text style={styles.groupName}>{groupName}</Text>

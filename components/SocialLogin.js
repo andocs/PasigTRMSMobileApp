@@ -2,9 +2,9 @@ import { StyleSheet, View, Image } from 'react-native';
 
 const SocialLogin = () => (
   <View style={styles.socialContainer}>
-    <Image style={styles.socialIcon} source={require('../assets/images/google.svg')} />
-    <Image style={styles.socialIcon} source={require('../assets/images/facebook.svg')} />
-    <Image style={styles.socialIcon} source={require('../assets/images/twitter.svg')} />
+    <Image style={styles.socialIcon} source={require('../assets/images/google.png')} />
+    <Image style={styles.socialIcon} source={require('../assets/images/facebook.png')} />
+    <Image style={styles.socialIcon} source={require('../assets/images/twitter.png')} />
   </View>
 );
 const styles = StyleSheet.create({

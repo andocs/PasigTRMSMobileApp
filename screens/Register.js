@@ -5,7 +5,10 @@ import {
   Image,
   Text,
   Alert,
-  ActivityIndicator, // Import ActivityIndicator for loading spinner
+  ActivityIndicator,
+  Dimensions,
+  SafeAreaView,
+  StatusBar
 } from "react-native";
 import { Padding, Color, FontSize, FontFamily } from "../GlobalStyles";
 import { useNavigation } from "@react-navigation/native";
@@ -15,6 +18,8 @@ import IndexFooter from "../components/IndexFooter";
 import HeaderBack from "../components/HeaderBack";
 import PrimaryButton from "../components/PrimaryButton";
 import SocialLogin from "../components/SocialLogin";
+
+const logoSize = (Dimensions.get('window').height / 100)*15
 
 const Register = () => {
   const navigation = useNavigation();
@@ -37,7 +42,7 @@ const Register = () => {
     setLoading(true); // Set loading to true
     try {
       const response = await fetch(
-        "http://192.168.1.8/pasigtrms/mobile/register.php",
+        "http://pasigtrms.great-site.net/mobile/register.php",
         {
           method: "POST",
           body: JSON.stringify({
@@ -65,7 +70,8 @@ const Register = () => {
   };
 
   return (
-    <View style={styles.register}>
+    <SafeAreaView style={styles.register}>
+      <StatusBar hidden={true} />
       <HeaderBack />
       <View style={styles.body}>
         <View style={[styles.logoContainer, styles.flexBox]}>
@@ -119,17 +125,15 @@ const Register = () => {
             <PrimaryButton
               onPress={handleRegister}
               text={"REGISTER"}
+              loading={loading}
             />
           </View>
-          {loading && ( // Show loader if loading is true
-            <ActivityIndicator size="large" color={Color.colorPrimary} />
-          )}
-          <Text style={styles.orText}>or sign in using</Text>
-          <SocialLogin />
+          {/* <Text style={styles.orText}>or sign in using</Text> */}
+          {/* <SocialLogin /> */}
         </View>
       </View>
       <IndexFooter />
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -191,8 +195,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   pasigLogo: {
-    height: "100%",
-    width: "100%",
+    height: logoSize,
+    width: logoSize,
     resizeMode: "contain",
   },
 });

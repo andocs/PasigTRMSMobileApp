@@ -10,7 +10,7 @@ const RoutesCard = ({ routeLine, routeStructure }) => {
     <View style={styles.container}>
       <View style={styles.detailsContainer}>
         <Image
-          source={require("../assets/images/route.svg")}
+          source={require("../assets/images/route.png")}
           style={styles.icon}
         />
         <Text style={styles.routeLine}>{routeLine}</Text>

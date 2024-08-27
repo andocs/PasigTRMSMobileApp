@@ -1,6 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, ScrollView, ActivityIndicator, Text, Modal, TouchableOpacity, Animated, Easing } from "react-native";
-import { BlurView } from 'expo-blur'; // Import BlurView from expo-blur
+import {
+  StyleSheet,
+  View,
+  ScrollView,
+  ActivityIndicator,
+  Text,
+  Modal,
+  TouchableOpacity,
+  Animated,
+  Easing,
+  SafeAreaView,
+  StatusBar,
+} from "react-native";
+import { BlurView } from "expo-blur"; // Import BlurView from expo-blur
 import { Ionicons } from "@expo/vector-icons";
 import Header from "../components/Header";
 import TerminalCard from "../components/TerminalCard";
@@ -18,9 +30,11 @@ const TerminalTab = () => {
   useEffect(() => {
     const fetchTerminals = async () => {
       try {
-        const response = await fetch("http://192.168.1.8/pasigtrms/mobile/get_terminals.php");
+        const response = await fetch(
+          "http://pasigtrms.great-site.net/mobile/get_terminals.php"
+        );
         const result = await response.json();
-        
+
         if (result.success) {
           setTerminals(result.data);
         } else {
@@ -103,7 +117,8 @@ const TerminalTab = () => {
   });
 
   return (
-    <View style={[styles.operatorsTab, styles.bodyFlexBox]}>
+    <SafeAreaView style={[styles.operatorsTab, styles.bodyFlexBox]}>
+      <StatusBar hidden={true} />
       <Header title={"TERMINALS"} />
       <View style={[styles.body, styles.containerFlexBox]}>
         <ScrollView
@@ -111,7 +126,10 @@ const TerminalTab = () => {
           contentContainerStyle={{ rowGap: 20 }}
         >
           {terminals.map((terminal) => (
-            <TouchableOpacity key={terminal.id} onPress={() => handleTerminalPress(terminal)}>
+            <TouchableOpacity
+              key={terminal.id}
+              onPress={() => handleTerminalPress(terminal)}
+            >
               <TerminalCard
                 terminalName={terminal.terminal_name}
                 terminalAddress={terminal.terminal_add}
@@ -131,28 +149,54 @@ const TerminalTab = () => {
         onRequestClose={closeModal}
       >
         <View style={styles.modalContainer}>
-          <BlurView intensity={30} style={styles.absolute} tint="systemChromeMaterialDark" />
-          <Animated.View style={[styles.modalContent, { transform: [{ translateY: modalTranslateY }] }]}>
-            <TouchableOpacity style={styles.closeIconContainer} onPress={closeModal}>
+          <BlurView
+            intensity={30}
+            style={styles.absolute}
+            tint="systemChromeMaterialDark"
+          />
+          <Animated.View
+            style={[
+              styles.modalContent,
+              { transform: [{ translateY: modalTranslateY }] },
+            ]}
+          >
+            <TouchableOpacity
+              style={styles.closeIconContainer}
+              onPress={closeModal}
+            >
               <Ionicons name="close" size={24} color={Color.colorPrimary} />
             </TouchableOpacity>
             {selectedTerminal && (
               <>
                 <Text style={styles.modalTitle}>Terminal Information</Text>
-                <Text style={styles.modalText}>Terminal Name: {selectedTerminal.terminal_name}</Text>
-                <Text style={styles.modalText}>Address: {selectedTerminal.terminal_add}</Text>
-                <Text style={styles.modalText}>Route: {selectedTerminal.route_line}</Text>
-                <Text style={styles.modalText}>Group: {selectedTerminal.group_name}</Text>
-                <Text style={styles.modalText}>Business Permit: {selectedTerminal.busi_permit}</Text>
-                <Text style={styles.modalText}>Business Start: {selectedTerminal.busi_date}</Text>
-                <Text style={styles.modalText}>Business Expire: {selectedTerminal.busi_expire}</Text>
+                <Text style={styles.modalText}>
+                  Terminal Name: {selectedTerminal.terminal_name}
+                </Text>
+                <Text style={styles.modalText}>
+                  Address: {selectedTerminal.terminal_add}
+                </Text>
+                <Text style={styles.modalText}>
+                  Route: {selectedTerminal.route_line}
+                </Text>
+                <Text style={styles.modalText}>
+                  Group: {selectedTerminal.group_name}
+                </Text>
+                <Text style={styles.modalText}>
+                  Business Permit: {selectedTerminal.busi_permit}
+                </Text>
+                <Text style={styles.modalText}>
+                  Business Start: {selectedTerminal.busi_date}
+                </Text>
+                <Text style={styles.modalText}>
+                  Business Expire: {selectedTerminal.busi_expire}
+                </Text>
                 {/* Add more terminal details as needed */}
               </>
             )}
           </Animated.View>
         </View>
       </Modal>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -235,7 +279,7 @@ const styles = StyleSheet.create({
   modalText: {
     color: Color.colorPrimary,
     fontFamily: FontFamily.montserratMedium,
-    textAlign: 'left',
+    textAlign: "left",
     fontSize: 14,
     marginVertical: 5,
   },

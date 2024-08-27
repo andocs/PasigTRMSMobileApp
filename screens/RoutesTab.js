@@ -9,6 +9,8 @@ import {
   TouchableOpacity,
   Animated,
   Easing,
+  SafeAreaView,
+  StatusBar
 } from "react-native";
 import { BlurView } from "expo-blur"; // Import BlurView from expo-blur
 import { Ionicons } from "@expo/vector-icons";
@@ -29,7 +31,7 @@ const RoutesTab = () => {
     const fetchRoutes = async () => {
       try {
         const response = await fetch(
-          "http://192.168.1.8/pasigtrms/mobile/get_routes.php"
+          "http://pasigtrms.great-site.net/mobile/get_routes.php"
         );
         const result = await response.json();
 
@@ -130,7 +132,8 @@ const RoutesTab = () => {
   };
 
   return (
-    <View style={[styles.routesTab, styles.bodyFlexBox]}>
+    <SafeAreaView style={[styles.routesTab, styles.bodyFlexBox]}>
+      <StatusBar hidden={true} />
       <Header title={"ROUTES"} />
       <View style={[styles.body, styles.containerFlexBox]}>
         <ScrollView
@@ -192,7 +195,7 @@ const RoutesTab = () => {
           </Animated.View>
         </View>
       </Modal>
-    </View>
+    </SafeAreaView>
   );
 };
 

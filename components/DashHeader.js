@@ -52,7 +52,6 @@ const styles = StyleSheet.create({
   trms: {
     fontSize: FontSize.size_5xl,
     letterSpacing: 3,
-    lineHeight: 20,
     fontFamily: FontFamily.bigShouldersDisplayRegular,
     color: Color.schemesOnPrimary,
     textAlign: "center",

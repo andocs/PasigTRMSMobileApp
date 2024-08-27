@@ -21,7 +21,7 @@ import ForgotPasswordEmail from "./screens/ForgotPasswordEmail";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-const DashboardTabs = ({ user }) => {
+const DashboardTabs = ({ user, onLogout }) => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -35,8 +35,8 @@ const DashboardTabs = ({ user }) => {
             label = "Home";
           } else if (route.name === "TerminalTab") {
             iconSource = focused
-              ? require("./assets/images/terminal.svg")
-              : require("./assets/images/terminal-outline.svg");
+              ? require("./assets/images/terminal.png")
+              : require("./assets/images/terminal-outline.png");
             label = "Terminals";
           } else if (route.name === "QRTab") {
             iconSource = focused
@@ -45,8 +45,8 @@ const DashboardTabs = ({ user }) => {
             label = "QR";
           } else if (route.name === "RoutesTab") {
             iconSource = focused
-              ? require("./assets/images/route.svg")
-              : require("./assets/images/route-outline.svg");
+              ? require("./assets/images/route.png")
+              : require("./assets/images/route-outline.png");
             label = "Routes";
           } else if (route.name === "ProfileTab") {
             iconSource = focused
@@ -98,7 +98,9 @@ const DashboardTabs = ({ user }) => {
       <Tab.Screen name="TerminalTab" component={TerminalTab} />
       <Tab.Screen name="QRTab" component={QRTab} />
       <Tab.Screen name="RoutesTab" component={RoutesTab} />
-      <Tab.Screen name="ProfileTab" children={() => <ProfileTab user={user} />} />
+      <Tab.Screen name="ProfileTab">
+        {() => <ProfileTab user={user} onLogout={onLogout} />}
+      </Tab.Screen>
     </Tab.Navigator>
   );
 };
@@ -120,6 +122,11 @@ const App = () => {
 
   const handleUserLogin = (userInfo) => {
     setUser(userInfo);
+  };
+
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem("userInfo");
+    setUser(null);
   };
 
   const [fontsLoaded, error] = useFonts({
@@ -146,8 +153,7 @@ const App = () => {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen
             name="DashboardTabs"
-            children={() => <DashboardTabs user={user} />}
-            options={{ headerShown: false }}
+            children={() => <DashboardTabs user={user} onLogout={handleLogout} />}
           />
         </Stack.Navigator>
       ) : (
@@ -155,27 +161,22 @@ const App = () => {
           <Stack.Screen
             name="LandingScreen"
             component={LandingScreen}
-            options={{ headerShown: false }}
           />
           <Stack.Screen
             name="ForgotPassword"
             component={ForgotPassword}
-            options={{ headerShown: false }}
           />
           <Stack.Screen
             name="Login"
             children={() => <Login onUserLogin={handleUserLogin} />}
-            options={{ headerShown: false }}
           />
           <Stack.Screen
             name="Register"
             component={Register}
-            options={{ headerShown: false }}
           />
           <Stack.Screen
             name="ForgotPasswordEmail"
             component={ForgotPasswordEmail}
-            options={{ headerShown: false }}
           />
         </Stack.Navigator>
       )}

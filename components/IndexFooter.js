@@ -6,7 +6,7 @@ const IndexFooter = () => {
     <View style={styles.footer}>
       <Image
         style={styles.cityScape}
-        source={require("../assets/images/pasig_cityscape.svg")}
+        source={require("../assets/images/pasig_cityscape.png")}
       />
       <Image
         style={styles.wordMark}

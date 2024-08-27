@@ -6,10 +6,13 @@ import {
   Text,
   TouchableOpacity,
   Alert,
+  SafeAreaView,
+  Dimensions,
+  ScrollView,
+  StatusBar,
 } from "react-native";
 import { Padding, Color, FontSize, FontFamily } from "../GlobalStyles";
 import { useNavigation } from "@react-navigation/native";
-
 import CustomInput from "../components/CustomInput";
 import IndexFooter from "../components/IndexFooter";
 import HeaderBack from "../components/HeaderBack";
@@ -17,18 +20,25 @@ import PrimaryButton from "../components/PrimaryButton";
 import SocialLogin from "../components/SocialLogin";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+const logoSize = (Dimensions.get("window").height / 100) * 15;
+
 const Login = ({ onUserLogin }) => {
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+  const [loading, setLoading] = useState(false); // Loading state
 
   const handleLogin = async () => {
+    setLoading(true); // Start loading
     try {
       const response = await fetch(
-        "http://192.168.1.8/pasigtrms/mobile/login.php",
+        "http://pasigtrms.great-site.net/mobile/login.php",
         {
           method: "POST",
+          headers: {
+            "Content-Type": "application/json", // Ensure the header is set
+          },
           body: JSON.stringify({
             email: email,
             password: password,
@@ -40,7 +50,7 @@ const Login = ({ onUserLogin }) => {
       const result = await response.json(); // Parse JSON here
 
       if (result.success) {
-        console.log(result)
+        console.log(result);
         Alert.alert("Success", result.message);
 
         // Access user information from the result
@@ -58,63 +68,83 @@ const Login = ({ onUserLogin }) => {
         await AsyncStorage.setItem("userInfo", JSON.stringify(userInfo)); // Store as string
         navigation.navigate("DashboardTabs", { user: userInfo });
       } else {
-        console.log(result)
+        console.log(result);
         Alert.alert("Error", result.message);
       }
     } catch (error) {
-        console.log(error)
-        Alert.alert("Error", "Something went wrong");
+        console.log(error.response);
+        if (error.response) {
+        // The request was made and the server responded with a status code that falls out of the range of 2xx
+        Alert.alert(
+          "Error",
+          `Server responded with status ${error.response.status}: ${error.response.data}`
+        );
+      } else if (error.request) {
+        // The request was made but no response was received
+        Alert.alert(
+          "Error",
+          `No response received from the server: ${error.request}`
+        );
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        Alert.alert("Error", `Network error: ${error.message}`);
+      }
+    } finally {
+      setLoading(false); // End loading
     }
   };
 
   return (
-    <View style={styles.login}>
+    <SafeAreaView style={styles.login}>
+      <StatusBar hidden={true} />
       <HeaderBack />
-      <View style={styles.body}>
-        <View style={[styles.logoContainer, styles.flexBox]}>
-          <Image
-            style={styles.pasigLogo}
-            source={require("../assets/images/pasig-seal.png")}
-          />
-        </View>
-        <View style={styles.innerBody}>
-          <Text style={styles.textHeader}>Login</Text>
-          <CustomInput
-            placeholder="Email"
-            iconName="person-outline"
-            value={email}
-            onChangeText={(text) => {
-              setEmail(text);
-            }}
-          />
-          <CustomInput
-            placeholder="Password"
-            iconName="lock-closed-outline"
-            secureTextEntry
-            value={password}
-            onChangeText={(text) => {
-              setPassword(text);
-            }}
-          />
-          <TouchableOpacity onPress={() => setRememberMe(!rememberMe)}>
-            <Text style={styles.rememberMe}>
-              {rememberMe ? "✔" : "☐"} Remember Me
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("ForgotPasswordEmail")}
-          >
-            <Text style={styles.forgotPassword}>Forgot Password?</Text>
-          </TouchableOpacity>
-          <View>
-            <PrimaryButton onPress={handleLogin} text={"LOGIN"} />
+      <ScrollView style={{width:"100%"}} contentContainerStyle={styles.scrollViewContent}>
+        <View style={styles.body}>
+          <View style={styles.logoContainer}>
+            <Image
+              style={styles.pasigLogo}
+              source={require("../assets/images/pasig-seal.png")}
+            />
           </View>
-          <Text style={styles.orText}>or sign in using</Text>
-          <SocialLogin />
+          <View style={styles.innerBody}>
+            <Text style={styles.textHeader}>Login</Text>
+            <CustomInput
+              placeholder="Email"
+              iconName="person-outline"
+              value={email}
+              onChangeText={(text) => {
+                setEmail(text);
+              }}
+            />
+            <CustomInput
+              placeholder="Password"
+              iconName="lock-closed-outline"
+              secureTextEntry
+              value={password}
+              onChangeText={(text) => {
+                setPassword(text);
+              }}
+            />
+            <TouchableOpacity onPress={() => setRememberMe(!rememberMe)}>
+              <Text style={styles.rememberMe}>
+                {rememberMe ? "✔" : "☐"} Remember Me
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("ForgotPasswordEmail")}
+            >
+              <Text style={styles.forgotPassword}>Forgot Password?</Text>
+            </TouchableOpacity>
+            <View>
+              <PrimaryButton onPress={handleLogin} text={"LOGIN"} loading={loading} />
+            </View>
+            {/* <Text style={styles.orText}>or sign in using</Text> */}
+            {/* <SocialLogin /> */}
+          </View>
         </View>
-      </View>
+      </ScrollView>
       <IndexFooter />
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -125,11 +155,16 @@ const styles = StyleSheet.create({
     height: "100%",
     paddingVertical: 0,
     alignItems: "center",
-    overflow: "hidden",
+    overflow: "scroll",
     justifyContent: "space-between",
     flex: 1,
   },
+  scrollViewContent: {
+    flexGrow: 1,
+    justifyContent: "space-between",
+  },
   body: {
+    width: "100%",
     paddingHorizontal: Padding.p_21xl,
     paddingBottom: 50,
     zIndex: 1,
@@ -188,9 +223,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   pasigLogo: {
-    height: "100%",
-    width: "100%",
-    resizeMode: "contain",
+    height: logoSize,
+    width: logoSize,
   },
 });
 

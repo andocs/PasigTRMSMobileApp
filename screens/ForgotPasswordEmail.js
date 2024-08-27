@@ -5,6 +5,9 @@ import {
   Image,
   Text,
   Alert,
+  Dimensions,
+  SafeAreaView,
+  StatusBar
 } from "react-native";
 import { Padding, Color, FontSize, FontFamily } from "../GlobalStyles";
 import { useNavigation } from "@react-navigation/native";
@@ -14,6 +17,7 @@ import IndexFooter from "../components/IndexFooter";
 import HeaderBack from "../components/HeaderBack";
 import PrimaryButton from "../components/PrimaryButton";
 
+const logoSize = (Dimensions.get('window').height / 100)*15
 const ForgotPasswordEmail = () => {
     const navigation = useNavigation();
     const [email, setEmail] = useState("");
@@ -23,14 +27,13 @@ const ForgotPasswordEmail = () => {
       setLoading(true);
       try {
         const response = await fetch(
-          "http://192.168.1.8/pasigtrms/mobile/verify_email.php",
+          "http://pasigtrms.great-site.net/mobile/verify_email.php",
           {
             method: "POST",
             body: JSON.stringify({ email }),
           }
         );
         const result = await response.json();
-        setLoading(false);
   
         if (result.success) {
           // Navigate to ForgotPassword screen with the userid as a prop
@@ -41,11 +44,14 @@ const ForgotPasswordEmail = () => {
       } catch (error) {
         setLoading(false);
         Alert.alert("Error", "An error occurred. Please try again.");
+      } finally {
+        setLoading(false);
       }
     };
 
   return (
-    <View style={styles.forgotPasswordEmail}>
+    <SafeAreaView style={styles.forgotPasswordEmail}>
+      <StatusBar hidden={true} />
       <HeaderBack />
       <View style={styles.body}>
         <View style={[styles.logoContainer, styles.flexBox]}>
@@ -69,12 +75,13 @@ const ForgotPasswordEmail = () => {
             <PrimaryButton
               onPress={handleSubmit} // Call handleEmailSubmit on button press
               text={"SUBMIT"}
+              loading={loading}
             />
           </View>
         </View>
       </View>
       <IndexFooter />
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -135,8 +142,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   pasigLogo: {
-    height: "100%",
-    width: "100%",
+    height: logoSize,
+    width: logoSize,
     resizeMode: "contain",
   },
 });

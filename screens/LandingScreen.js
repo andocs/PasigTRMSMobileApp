@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, Image } from "react-native";
+import { StyleSheet, View, Text, Image, SafeAreaView, Dimensions, StatusBar } from "react-native";
 import { Color, Padding, FontFamily } from "../GlobalStyles";
 import { useNavigation } from "@react-navigation/native";
 
@@ -6,10 +6,13 @@ import OutlineButton from "../components/OutlineButton";
 import PrimaryButton from "../components/PrimaryButton";
 import IndexFooter from "../components/IndexFooter";
 
+const trmsSize = (Dimensions.get('window').height / 100)*4
+
 const LandingScreen = () => {
   const navigate = useNavigation();
   return (
-    <View style={styles.landingScreen}>
+    <SafeAreaView style={styles.landingScreen}>
+      <StatusBar hidden={true} />
       <Image
         style={styles.headerIcon}
         contentFit="cover"
@@ -42,7 +45,7 @@ const LandingScreen = () => {
         </View>
       </View>
       <IndexFooter />
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -105,7 +108,7 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
   trms: {
-    fontSize: "4vh",
+    fontSize: trmsSize,
     letterSpacing: 1,
     lineHeight: 35,
     fontWeight: "800",
@@ -121,7 +124,6 @@ const styles = StyleSheet.create({
     gap: 10,
     paddingHorizontal: Padding.p_9xs,
     marginVertical: 30,
-    overflow: "hidden",
     flex: 1,
   },
 });

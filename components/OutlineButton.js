@@ -1,13 +1,17 @@
-import { StyleSheet, View, Text, Pressable } from "react-native";
+import { StyleSheet, View, Text, Pressable, ActivityIndicator } from "react-native";
 import { Color, Padding, FontFamily, FontSize, Border } from "../GlobalStyles";
 
-const OutlineButton = ({ onPress, text }) => {
+const OutlineButton = ({ onPress, text, loading }) => {
   return (
     <View style={[styles.button, styles.buttonContainerFlexBox]}>
       <Pressable
         style={[styles.stateLayer, styles.buttonContainerFlexBox]}
         onPress={onPress}>
-        <Text style={styles.labelText}>{text}</Text>
+        {loading ? (
+          <ActivityIndicator size="small" color={Color.colorPrimary} />
+        ) : (
+          <Text style={styles.labelText}>{text}</Text>
+        )}
       </Pressable>
     </View>
   );

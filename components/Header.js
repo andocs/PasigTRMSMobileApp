@@ -46,7 +46,6 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: FontSize.size_5xl,
     letterSpacing: 3,
-    lineHeight: 20,
     fontWeight: "700",
     fontFamily: FontFamily.montserratBold,
     color: Color.schemesOnPrimary,
@@ -64,7 +63,6 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
     alignItems: "center",
     flexDirection: "row",
-    overflow: "hidden",
   },
   pasigCitySealLogo2Icon: {
     maxWidth: "100%",

@@ -1,13 +1,18 @@
-import { StyleSheet, View, Text, Pressable } from "react-native";
+import { StyleSheet, View, Text, Pressable, ActivityIndicator } from "react-native";
 import { Color, Padding, FontFamily, FontSize, Border } from "../GlobalStyles";
 
-const PrimaryButton = ({ onPress, text }) => {
+const PrimaryButton = ({ onPress, text, loading }) => {
   return (
     <View style={[styles.button, styles.buttonContainerFlexBox]}>
       <Pressable
         style={[styles.stateLayer, styles.buttonContainerFlexBox]}
-        onPress={onPress}>
-        <Text style={styles.labelText}>{text}</Text>
+        onPress={onPress}
+      >
+        {loading ? (
+          <ActivityIndicator size="small" color="#fff" />
+        ) : (
+          <Text style={styles.labelText}>{text}</Text>
+        )}
       </Pressable>
     </View>
   );
@@ -39,9 +44,9 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     fontWeight: "900",
     textAlign: "center",
-    color: 'white',
+    color: "white",
     fontFamily: FontFamily.interBlack,
   },
 });
 
-export default PrimaryButton
+export default PrimaryButton;

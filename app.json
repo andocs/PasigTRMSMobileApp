@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "pasig_trms_mobile_app",
-    "slug": "pasig_trms_mobile_app",
+    "name": "Pasig TRMS",
+    "slug": "pasigtrmsmobileapp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/images/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/images/splashscreen.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -18,24 +18,39 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "$(PRODUCT_NAME) needs access to your Camera."
+      }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.pasigcity.pasigtrms",
+      "permissions": [
+        "android.permission.CAMERA"
+      ]
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      "expo-font"
+      "expo-font",
+      [
+        "react-native-vision-camera",
+        {
+          "enableCodeScanner": true,
+          "cameraPermissionText": "$(PRODUCT_NAME) needs access to your Camera."
+        }
+      ]
     ],
     "extra": {
       "eas": {
-        "projectId": "a5b718d9-074b-4441-9ff6-fe923f6eb170"
+        "projectId": "c6e940ec-b92f-4134-9011-bd93c6698c6d"
       }
-    }
+    },
+    "owner": "docotkat"
   }
 }
