@@ -110,7 +110,7 @@ const Login = ({ onUserLogin }) => {
             <Text style={styles.textHeader}>Login</Text>
             <CustomInput
               placeholder="Email"
-              iconName="person-outline"
+              iconName="mail-outline"
               value={email}
               onChangeText={(text) => {
                 setEmail(text);

@@ -29,11 +29,6 @@ const HeadContainer = ({ user }) => {
             {user ? capitalizeFirstLetter(user.role) : "Operator"}
           </Text>
         </View>
-        <Image
-          style={styles.pfpContainerIcon}
-          contentFit="cover"
-          source={require("../assets/images/edit-container.png")}
-        />
       </View>
     </View>
   );
