@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   Dimensions,
   SafeAreaView,
+  ScrollView,
   StatusBar
 } from "react-native";
 import { Padding, Color, FontSize, FontFamily } from "../GlobalStyles";
@@ -73,65 +74,67 @@ const Register = () => {
     <SafeAreaView style={styles.register}>
       <StatusBar hidden={true} />
       <HeaderBack />
-      <View style={styles.body}>
-        <View style={[styles.logoContainer, styles.flexBox]}>
-          <Image
-            style={styles.pasigLogo}
-            source={require("../assets/images/pasig-seal.png")}
-          />
-        </View>
-        <View style={styles.innerBody}>
-          <Text style={styles.textHeader}>Register</Text>
-          <View style={styles.inputGroup}>
-            <CustomInput
-              placeholder="Full Name"
-              iconName="person-outline"
-              inputHeight={35}
-              value={fullName}
-              onChangeText={setFullName}
-            />
-            <CustomInput
-              placeholder="Username"
-              iconName="person-outline"
-              inputHeight={35}
-              value={username}
-              onChangeText={setUserName}
-            />
-            <CustomInput
-              placeholder="Email Address"
-              iconName="mail-outline"
-              inputHeight={35}
-              value={email}
-              onChangeText={setEmail}
-            />
-            <CustomInput
-              placeholder="Password"
-              iconName="lock-closed-outline"
-              secureTextEntry
-              inputHeight={35}
-              value={password}
-              onChangeText={setPassword}
-            />
-            <CustomInput
-              placeholder="Confirm Password"
-              iconName="lock-closed-outline"
-              secureTextEntry
-              inputHeight={35}
-              value={confirmPassword}
-              onChangeText={setConfirmPassword}
+      <ScrollView style={{width:"100%"}} contentContainerStyle={styles.scrollViewContent}>
+        <View style={styles.body}>
+          <View style={[styles.logoContainer, styles.flexBox]}>
+            <Image
+              style={styles.pasigLogo}
+              source={require("../assets/images/pasig-seal.png")}
             />
           </View>
-          <View style={styles.buttonContainer}>
-            <PrimaryButton
-              onPress={handleRegister}
-              text={"REGISTER"}
-              loading={loading}
-            />
+          <View style={styles.innerBody}>
+            <Text style={styles.textHeader}>Register</Text>
+            <View style={styles.inputGroup}>
+              <CustomInput
+                placeholder="Full Name"
+                iconName="person-outline"
+                inputHeight={35}
+                value={fullName}
+                onChangeText={setFullName}
+              />
+              <CustomInput
+                placeholder="Username"
+                iconName="person-outline"
+                inputHeight={35}
+                value={username}
+                onChangeText={setUserName}
+              />
+              <CustomInput
+                placeholder="Email Address"
+                iconName="mail-outline"
+                inputHeight={35}
+                value={email}
+                onChangeText={setEmail}
+              />
+              <CustomInput
+                placeholder="Password"
+                iconName="lock-closed-outline"
+                secureTextEntry
+                inputHeight={35}
+                value={password}
+                onChangeText={setPassword}
+              />
+              <CustomInput
+                placeholder="Confirm Password"
+                iconName="lock-closed-outline"
+                secureTextEntry
+                inputHeight={35}
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
+              />
+            </View>
+            <View style={styles.buttonContainer}>
+              <PrimaryButton
+                onPress={handleRegister}
+                text={"REGISTER"}
+                loading={loading}
+              />
+            </View>
+            {/* <Text style={styles.orText}>or sign in using</Text> */}
+            {/* <SocialLogin /> */}
           </View>
-          {/* <Text style={styles.orText}>or sign in using</Text> */}
-          {/* <SocialLogin /> */}
         </View>
-      </View>
+      </ScrollView>
       <IndexFooter />
     </SafeAreaView>
   );
@@ -147,6 +150,10 @@ const styles = StyleSheet.create({
     overflow: "scroll",
     justifyContent: "space-between",
     flex: 1,
+  },
+  scrollViewContent: {
+    flexGrow: 1,
+    justifyContent: "space-between",
   },
   body: {
     paddingHorizontal: Padding.p_21xl,
