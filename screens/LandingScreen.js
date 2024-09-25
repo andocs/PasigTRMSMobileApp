@@ -111,7 +111,6 @@ const styles = StyleSheet.create({
     fontSize: trmsSize,
     letterSpacing: 1,
     lineHeight: 35,
-    fontWeight: "800",
     fontFamily: FontFamily.montserratExtraBold,
     marginTop: 10,
   },

@@ -2,6 +2,7 @@ import * as React from "react";
 import { StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Border, Padding } from "../GlobalStyles";
+
 import QuickActionButton from "./QuickActionButton";
 
 const MainContainer = () => {
@@ -27,6 +28,11 @@ const MainContainer = () => {
             icon={require("../assets/images/qr-code.png")}
             text={"QR Code"}
             onPress={() => navigation.navigate("QRTab")}
+          />
+          <QuickActionButton
+            icon={require("../assets/images/open-map.png")}
+            text={"Map"}
+            onPress={() => navigation.navigate("MapScreen")}
           />
         </View>
       </View>

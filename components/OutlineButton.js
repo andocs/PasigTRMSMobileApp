@@ -44,7 +44,6 @@ const styles = StyleSheet.create({
     fontSize: FontSize.m3LabelLarge_size,
     letterSpacing: 3,
     lineHeight: 20,
-    fontWeight: "900",
     textAlign: "center",
     color: Color.colorPrimary,
     fontFamily: FontFamily.interBlack,

@@ -273,7 +273,6 @@ const styles = StyleSheet.create({
     color: Color.colorPrimary,
     fontFamily: FontFamily.montserratBlack,
     fontSize: 20,
-    fontWeight: "bold",
     marginBottom: 10,
   },
   modalText: {

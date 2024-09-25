@@ -16,54 +16,69 @@ import CustomInput from "../components/CustomInput";
 import IndexFooter from "../components/IndexFooter";
 import HeaderBack from "../components/HeaderBack";
 import PrimaryButton from "../components/PrimaryButton";
-
+    
 const logoSize = (Dimensions.get("window").height / 100) * 15;
 
-const ForgotPassword = ({ route }) => {
+const RegistrationCode = ({ route }) => {
   const navigation = useNavigation();
-  const { userid } = route.params; // Get userid from route params
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [loading, setLoading] = useState(false); // State for loading
+  const { email } = route.params; // Get email from route params
+  const [code, setCode] = useState(""); // State for the code input
+  const [submitLoading, setSubmitLoading] = useState(false); // State for loading
+  const [resendLoading, setResendLoading] = useState(false); // State for loading
 
+  // Handle code submission
   const handleSubmit = async () => {
-    if (newPassword !== confirmPassword) {
-      Alert.alert("Error", "Passwords do not match.");
-      return;
-    }
-
-    // Send the new password to the server
+    setSubmitLoading(true);
     try {
       const response = await fetch(
-        "http://pasigtrms.great-site.net/mobile/reset_password.php", // Adjust the endpoint URL as needed
+        "http://pasigtrms.great-site.net/mobile/verify_code.php",
         {
           method: "POST",
-          body: JSON.stringify({ 
-            userid: userid, 
-            password: newPassword 
-          }),
+          body: JSON.stringify({ email, code }),
         }
       );
 
       const result = await response.json();
-
       if (result.success) {
-        Alert.alert("Success", result.message);
-        navigation.navigate("LandingScreen"); // Navigate after successful registration
-        // Optionally navigate back to the login screen or another screen
+        Alert.alert("Success", "Code verified successfully!");
+        navigation.navigate("LandingScreen");
       } else {
         Alert.alert("Error", result.message);
       }
     } catch (error) {
-      setLoading(false);
       Alert.alert("Error", "An error occurred. Please try again.");
     } finally {
-      setLoading(false); // Set loading to false after process completes
+      setSubmitLoading(false); // Set loading to false after process completes
+    }
+  };
+
+  // Handle resend code
+  const handleResendCode = async () => {
+    setResendLoading(true);
+    try {
+      const response = await fetch(
+        "http://pasigtrms.great-site.net/mobile/resend_code.php", // Adjust the resend endpoint
+        {
+          method: "POST",
+          body: JSON.stringify({ email }),
+        }
+      );
+
+      const result = await response.json();
+      if (result.success) {
+        Alert.alert("Success", "A new code has been sent to your email.");
+      } else {
+        Alert.alert("Error", result.message);
+      }
+    } catch (error) {
+      Alert.alert("Error", "An error occurred. Please try again.");
+    } finally {
+      setResendLoading(false);
     }
   };
 
   return (
-    <SafeAreaView style={styles.forgotPassword}>
+    <SafeAreaView style={styles.registrationCode}>
       <StatusBar hidden={true} />
       <HeaderBack />
       <View style={styles.body}>
@@ -74,23 +89,22 @@ const ForgotPassword = ({ route }) => {
           />
         </View>
         <View style={styles.innerBody}>
-          <Text style={styles.textHeader}>Forgot Password</Text>
+          <Text style={styles.textHeader}>Verify Registration</Text>
+          <Text style={styles.subText}>
+            A code has been sent to your email. Please enter it below.
+          </Text>
           <View style={styles.inputGroup}>
             <CustomInput
-              placeholder="New Password"
-              iconName="lock-closed-outline"
-              secureTextEntry
-              onChangeText={(text) => setNewPassword(text)}
-            />
-            <CustomInput
-              placeholder="Confirm Password"
-              iconName="lock-closed-outline"
-              secureTextEntry
-              onChangeText={(text) => setConfirmPassword(text)}
+              placeholder="Enter Code"
+              iconName="key-outline"
+              inputHeight={35}
+              value={code}
+              onChangeText={setCode}
             />
           </View>
           <View style={styles.buttonContainer}>
-            <PrimaryButton onPress={handleSubmit} text={"SUBMIT"} loading={loading} />
+            <PrimaryButton onPress={handleSubmit} text={"SUBMIT"} loading={submitLoading} />
+            <PrimaryButton onPress={handleResendCode} text={"RESEND CODE"} loading={resendLoading} />
           </View>
         </View>
       </View>
@@ -100,7 +114,7 @@ const ForgotPassword = ({ route }) => {
 };
 
 const styles = StyleSheet.create({
-  forgotPassword: {
+  registrationCode: {
     backgroundColor: Color.schemesOnPrimary,
     width: "100%",
     height: "100%",
@@ -109,10 +123,6 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     justifyContent: "space-between",
     flex: 1,
-  },
-  inputGroup: {
-    gap: 10,
-    width: "100%",
   },
   body: {
     paddingHorizontal: Padding.p_21xl,
@@ -135,12 +145,26 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.montserratExtraBold,
     textAlign: "center",
   },
+  subText: {
+    color: Color.colorPrimary,
+    fontSize: FontSize.size_sm,
+    textAlign: "center",
+    marginBottom: 10,
+  },
   logoContainer: {
     flex: 1,
     paddingBottom: Padding.p_xl,
     flexDirection: "row",
     justifyContent: "center",
     overflow: "hidden",
+  },
+  inputGroup: {
+    gap: 10,
+    width: "100%",
+  },
+  buttonContainer: {
+    width: "100%",
+    gap: 15,
   },
   flexBox: {
     justifyContent: "center",
@@ -154,4 +178,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ForgotPassword;
+export default RegistrationCode;

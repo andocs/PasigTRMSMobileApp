@@ -1,9 +1,15 @@
-import React from "react";
-import { View, TextInput, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import { View, TextInput, StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Color, FontSize, FontFamily } from "../GlobalStyles";
 
 const CustomInput = ({ placeholder, iconName, value, onChangeText, secureTextEntry }) => {
+  const [isPasswordVisible, setIsPasswordVisible] = useState(secureTextEntry);
+
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible(!isPasswordVisible);
+  };
+
   return (
     <View style={styles.inputContainer}>
       <Ionicons name={iconName} size={24} color={Color.colorPrimary} />
@@ -13,8 +19,17 @@ const CustomInput = ({ placeholder, iconName, value, onChangeText, secureTextEnt
         placeholderTextColor={Color.colorPrimary}
         value={value}
         onChangeText={onChangeText}
-        secureTextEntry={secureTextEntry}
+        secureTextEntry={isPasswordVisible}
       />
+      {secureTextEntry && (
+        <TouchableOpacity onPress={togglePasswordVisibility}>
+          <Ionicons
+            name={isPasswordVisible ? "eye-off" : "eye"}
+            size={24}
+            color={Color.colorPrimary}
+          />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

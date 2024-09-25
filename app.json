@@ -31,7 +31,12 @@
       "package": "com.pasigcity.pasigtrms",
       "permissions": [
         "android.permission.CAMERA"
-      ]
+      ],
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyAlX1k6lBzioX_bXseu60_LhHbcRDqaAbI"
+        }
+      }
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
@@ -44,6 +49,12 @@
           "enableCodeScanner": true,
           "cameraPermissionText": "$(PRODUCT_NAME) needs access to your Camera."
         }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+        }
       ]
     ],
     "extra": {
@@ -51,6 +62,6 @@
         "projectId": "c6e940ec-b92f-4134-9011-bd93c6698c6d"
       }
     },
-    "owner": "docotkat"
+    "owner": "blu-path"
   }
 }

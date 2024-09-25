@@ -68,7 +68,6 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   ifYouNeed: {
-    fontWeight: "600",
     fontFamily: FontFamily.montserratSemiBold,
     textAlign: "left",
     color: Color.schemesOnPrimary,

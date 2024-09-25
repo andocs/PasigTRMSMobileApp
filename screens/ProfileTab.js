@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -8,15 +8,18 @@ import {
   Alert,
   SafeAreaView,
   StatusBar,
+  ActivityIndicator,  // Import ActivityIndicator
 } from "react-native";
 import { Color, FontSize, FontFamily, Padding, Border } from "../GlobalStyles";
-
 import Header from "../components/Header";
 import UpdateInformation from "../components/UpdateInformation";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ProfileTab = ({ user, onLogout }) => {
+  const [loading, setLoading] = useState(false); // Loading state
+
   const handleLogout = async () => {
+    setLoading(true); // Start loading
     try {
       const response = await fetch(
         "http://pasigtrms.great-site.net/mobile/logout.php",
@@ -28,7 +31,6 @@ const ProfileTab = ({ user, onLogout }) => {
       const result = await response.json();
 
       if (result.success) {
-        console.log(result.message);
         await AsyncStorage.removeItem("userInfo");
         onLogout(); // Call the onLogout prop to reset navigation
       } else {
@@ -36,12 +38,9 @@ const ProfileTab = ({ user, onLogout }) => {
       }
     } catch (error) {
       Alert.alert("Logout error", error.message);
+    } finally {
+      setLoading(false); // End loading
     }
-  };
-
-  const capitalizeFirstLetter = (string) => {
-    if (!string) return ""; // Return empty string if input is falsy
-    return string.charAt(0).toUpperCase() + string.slice(1);
   };
 
   return (
@@ -61,7 +60,7 @@ const ProfileTab = ({ user, onLogout }) => {
                 {user ? user.name : "JUAN DELA CRUZ"}
               </Text>
               <Text style={[styles.operator, styles.flexBox]}>
-                {user ? capitalizeFirstLetter(user.role) : "Operator"}
+                {user.info ? user.info.role : "User"}
               </Text>
             </View>
           </View>
@@ -80,8 +79,16 @@ const ProfileTab = ({ user, onLogout }) => {
             </View>
           </View>
           <UpdateInformation />
-          <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-            <Text style={styles.logoutButtonText}>Logout</Text>
+          <TouchableOpacity
+            style={styles.logoutButton}
+            onPress={handleLogout}
+            disabled={loading} // Disable button while loading
+          >
+            {loading ? (
+              <ActivityIndicator size="small" color="red" /> // Show spinner if loading
+            ) : (
+              <Text style={styles.logoutButtonText}>Logout</Text>
+            )}
           </TouchableOpacity>
         </View>
       </View>
@@ -107,7 +114,6 @@ const styles = StyleSheet.create({
     fontSize: FontSize.m3BodyLarge_size,
     letterSpacing: 3,
     lineHeight: 16,
-    fontWeight: "600",
     fontFamily: FontFamily.montserratSemiBold,
   },
   operator: {
@@ -160,7 +166,6 @@ const styles = StyleSheet.create({
   profileTab: {
     backgroundColor: Color.colorPrimary,
     width: "100%",
-    height: 800,
     justifyContent: "space-between",
     alignItems: "center",
     overflow: "hidden",
@@ -192,7 +197,6 @@ const styles = StyleSheet.create({
     fontSize: FontSize.m3BodyLarge_size,
     letterSpacing: 1,
     lineHeight: 16,
-    fontWeight: "600",
     fontFamily: FontFamily.montserratSemiBold,
     color: Color.colorPrimary,
     textAlign: "left",

@@ -59,7 +59,6 @@ const styles = StyleSheet.create({
   },
   driverInformation: {
     fontSize: FontSize.size_xl,
-    fontWeight: "900",
     fontFamily: FontFamily.montserratBlack,
     textAlign: "left",
     color: Color.colorPrimary,
@@ -75,12 +74,10 @@ const styles = StyleSheet.create({
   },
   driver: {
     letterSpacing: 3,
-    fontWeight: "600",
     fontFamily: FontFamily.montserratSemiBold,
   },
   michaelJordan: {
     letterSpacing: 1,
-    fontWeight: "500",
     fontFamily: FontFamily.montserratMedium,
     marginLeft: 10,
   },

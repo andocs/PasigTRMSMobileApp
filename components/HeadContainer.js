@@ -4,10 +4,6 @@ import { Text, StyleSheet, View, Image } from "react-native";
 import { Color, FontSize, FontFamily, Padding, Border } from "../GlobalStyles";
 
 const HeadContainer = ({ user }) => {
-  const capitalizeFirstLetter = (string) => {
-    if (!string) return ""; // Return empty string if input is falsy
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  };
   return (
     <View style={[styles.headContainer, styles.containerFlexBox]}>
       <Text style={styles.welcomeBack}>Welcome Back!</Text>
@@ -26,7 +22,7 @@ const HeadContainer = ({ user }) => {
             {user ? user.name : "JUAN DELA CRUZ"}
           </Text>
           <Text style={[styles.operator, styles.operatorLayout]}>
-            {user ? capitalizeFirstLetter(user.role) : "Operator"}
+            {user.info ? user.info.role : "User"}
           </Text>
         </View>
       </View>
@@ -51,7 +47,6 @@ const styles = StyleSheet.create({
     textAlign: "left",
     lineHeight: 20,
     fontFamily: FontFamily.montserratBold,
-    fontWeight: "700",
     letterSpacing: 1,
     alignSelf: "stretch",
   },
@@ -64,12 +59,10 @@ const styles = StyleSheet.create({
     fontSize: FontSize.m3BodySmall_size,
     letterSpacing: 2,
     fontFamily: FontFamily.montserratBold,
-    fontWeight: "700",
     color: Color.schemesOnPrimary,
   },
   operator: {
     fontSize: FontSize.size_3xs,
-    fontWeight: "500",
     fontFamily: FontFamily.montserratMedium,
     color: Color.schemesOnPrimary,
     letterSpacing: 1,

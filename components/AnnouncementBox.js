@@ -1,15 +1,19 @@
-import { StyleSheet, View, Image } from "react-native";
-import  { Border } from "../GlobalStyles";
+import { StyleSheet, View, Image, Pressable } from "react-native";
+import { Border } from "../GlobalStyles";
 
-const AnnouncementBox = ({announcement}) => {
+const AnnouncementBox = ({ announcement, onPress }) => {
+  // Add 's' to image_type
+  const imageTypeWithS = `${announcement.image_type}s`;
+  const sourceURL = `http://pasigtrms.great-site.net/uploads/${imageTypeWithS}/${announcement.image_path}`;
+
   return (
-    <View style={styles.imageContainer}>
+    <Pressable style={styles.imageContainer} onPress={onPress}>
       <Image
         style={styles.announcementImg}
         contentFit="cover"
-        source={announcement}
+        source={{ uri: sourceURL }}
       />
-    </View>
+    </Pressable>
   );
 };
 
@@ -24,7 +28,7 @@ const styles = StyleSheet.create({
       width: 0,
       height: 4,
     },
-    flex: 1,
+    width: "90%",
     shadowColor: "rgba(0, 0, 0, 0.25)",
     justifyContent: "center",
     alignItems: "center",
@@ -32,8 +36,8 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   announcementImg: {
-    maxWidth: "100%",
     maxHeight: "100%",
+    height: "100%",
     width: "100%",
   },
 });

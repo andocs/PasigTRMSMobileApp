@@ -2,7 +2,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import { useState, useEffect } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View, Image, Platform } from "react-native";
+
 import { useFonts } from "expo-font";
 import { Color, Padding, FontFamily, FontSize } from "./GlobalStyles";
 
@@ -10,6 +11,7 @@ import TerminalTab from "./screens/TerminalTab";
 import ForgotPassword from "./screens/ForgotPassword";
 import RoutesTab from "./screens/RoutesTab";
 import Dashboard from "./screens/Dashboard";
+import MapScreen from "./screens/MapScreen";
 import Login from "./screens/Login";
 import Register from "./screens/Register";
 import ProfileTab from "./screens/ProfileTab";
@@ -17,6 +19,11 @@ import LandingScreen from "./screens/LandingScreen";
 import QRTab from "./screens/QRTab";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ForgotPasswordEmail from "./screens/ForgotPasswordEmail";
+import RegistrationCode from "./screens/RegistrationCode";
+import AnnouncementsScreen from "./screens/AnnouncementsScreen";
+import QRGenerator from "./screens/QRGenerator";
+import SelectLocationScreen from "./screens/SelectLocationScreen";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -48,6 +55,11 @@ const DashboardTabs = ({ user, onLogout }) => {
               ? require("./assets/images/route.png")
               : require("./assets/images/route-outline.png");
             label = "Routes";
+          } else if (route.name === "MapScreen") {
+            iconSource = focused
+              ? require("./assets/images/map.png")
+              : require("./assets/images/map-outline.png");
+            label = "Map";
           } else if (route.name === "ProfileTab") {
             iconSource = focused
               ? require("./assets/images/profile.png")
@@ -95,12 +107,54 @@ const DashboardTabs = ({ user, onLogout }) => {
       })}
     >
       <Tab.Screen name="Home" children={() => <Dashboard user={user} />} />
-      <Tab.Screen name="TerminalTab" component={TerminalTab} />
-      <Tab.Screen name="QRTab" component={QRTab} />
-      <Tab.Screen name="RoutesTab" component={RoutesTab} />
+      <Tab.Screen
+        name="TerminalTab"
+        component={TerminalTab}
+        options={{
+          tabBarVisible: false, //hide tab bar on this screen
+        }}
+      />
+      <Tab.Screen
+        name="QRTab"
+        children={() => <QRTab user={user} />}
+        options={{
+          tabBarVisible: false, //hide tab bar on this screen
+        }}
+      />
+      <Tab.Screen
+        name="RoutesTab"
+        component={RoutesTab}
+        options={{
+          tabBarVisible: false, //hide tab bar on this screen
+        }}
+      />
       <Tab.Screen name="ProfileTab">
-        {() => <ProfileTab user={user} onLogout={onLogout} />}
+        {() => (
+          <ProfileTab
+            user={user}
+            onLogout={onLogout}
+            options={{
+              tabBarVisible: false, //hide tab bar on this screen
+            }}
+          />
+        )}
       </Tab.Screen>
+      <Tab.Screen
+        name="AnnouncementsScreen"
+        component={AnnouncementsScreen}
+        options={{
+          tabBarButton: () => null,
+          tabBarVisible: false,
+        }}
+      />
+      <Tab.Screen
+        name="QRGenerator"
+        component={QRGenerator}
+        options={{
+          tabBarButton: () => null,
+          tabBarVisible: false,
+        }}
+      />
     </Tab.Navigator>
   );
 };
@@ -148,39 +202,43 @@ const App = () => {
   }
 
   return (
-    <NavigationContainer>
-      {user ? (
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen
-            name="DashboardTabs"
-            children={() => <DashboardTabs user={user} onLogout={handleLogout} />}
-          />
-        </Stack.Navigator>
-      ) : (
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen
-            name="LandingScreen"
-            component={LandingScreen}
-          />
-          <Stack.Screen
-            name="ForgotPassword"
-            component={ForgotPassword}
-          />
-          <Stack.Screen
-            name="Login"
-            children={() => <Login onUserLogin={handleUserLogin} />}
-          />
-          <Stack.Screen
-            name="Register"
-            component={Register}
-          />
-          <Stack.Screen
-            name="ForgotPasswordEmail"
-            component={ForgotPasswordEmail}
-          />
-        </Stack.Navigator>
-      )}
-    </NavigationContainer>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <NavigationContainer>
+        {user ? (
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen
+              name="DashboardTabs"
+              children={() => (
+                <DashboardTabs user={user} onLogout={handleLogout} />
+              )}
+            />
+            <Stack.Screen name="MapScreen" component={MapScreen} />
+            <Stack.Screen
+              name="SelectLocationScreen"
+              component={SelectLocationScreen}
+            />
+          </Stack.Navigator>
+        ) : (
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="LandingScreen" component={LandingScreen} />
+            <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+            <Stack.Screen
+              name="Login"
+              children={() => <Login onUserLogin={handleUserLogin} />}
+            />
+            <Stack.Screen name="Register" component={Register} />
+            <Stack.Screen
+              name="RegistrationCode"
+              component={RegistrationCode}
+            />
+            <Stack.Screen
+              name="ForgotPasswordEmail"
+              component={ForgotPasswordEmail}
+            />
+          </Stack.Navigator>
+        )}
+      </NavigationContainer>
+    </GestureHandlerRootView>
   );
 };
 
@@ -212,7 +270,6 @@ const styles = StyleSheet.create({
     fontSize: FontSize.size_3xs,
     letterSpacing: 1,
     lineHeight: 20,
-    fontWeight: "600",
     fontFamily: FontFamily.montserratSemiBold,
     color: Color.schemesOnPrimary,
   },

@@ -118,7 +118,6 @@ const styles = StyleSheet.create({
   textHeader: {
     color: Color.colorPrimary,
     fontSize: FontSize.size_5xl,
-    fontWeight: "800",
     fontFamily: FontFamily.montserratExtraBold,
     textAlign: "center",
   },

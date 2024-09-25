@@ -33,12 +33,9 @@ const Login = ({ onUserLogin }) => {
     setLoading(true); // Start loading
     try {
       const response = await fetch(
-        "https://pasigtrms.great-site.net/mobile/login.php",
+        "http://pasigtrms.great-site.net/mobile/login.php",
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json", // Ensure the header is set
-          },
           body: JSON.stringify({
             email: email,
             password: password,
@@ -46,34 +43,67 @@ const Login = ({ onUserLogin }) => {
           }),
         }
       );
-
+  
       const result = await response.json(); // Parse JSON here
-
+  
       if (result.success) {
-        console.log(result);
         Alert.alert("Success", result.message);
-
+  
         // Access user information from the result
         const userInfo = {
           userid: result.user.userid,
-          username: result.user.username,
           role: result.user.role,
           email: result.user.email,
           name: result.user.name,
+          info: result.user.info
         };
-
+  
         onUserLogin(userInfo);
-
+  
         // Store user info in AsyncStorage
         await AsyncStorage.setItem("userInfo", JSON.stringify(userInfo)); // Store as string
         navigation.navigate("DashboardTabs", { user: userInfo });
+      } else if (result.action === "redirect") {        
+        Alert.alert(
+          "Inactive Account",
+          result.message,
+          [
+            {
+              text: "Verify Account",
+              onPress: async () => {
+                try {
+                  // Fetch the resend_code endpoint before navigation
+                  const resendResponse = await fetch(
+                    "http://pasigtrms.great-site.net/mobile/resend_code.php",
+                    {
+                      method: "POST",
+                      body: JSON.stringify({
+                        email: email,
+                      }),
+                    }
+                  );
+                  const resendResult = await resendResponse.json();
+  
+                  if (resendResult.status === "success") {
+                    // Navigate to verification page after successfully sending the code
+                    navigation.navigate(result.redirect_to, { email: email });
+                  } else {
+                    // If there was an issue with resending the code
+                    Alert.alert("Error", resendResult.message);
+                  }
+                } catch (error) {
+                  Alert.alert("Error", "Failed to resend the verification code.");
+                }
+              },
+            },
+          ],
+          { cancelable: false }
+        );
       } else {
-        console.log(result);
         Alert.alert("Error", result.message);
       }
     } catch (error) {
-        console.log(error.response);
-        if (error.response) {
+      if (error.response) {
         // The request was made and the server responded with a status code that falls out of the range of 2xx
         Alert.alert(
           "Error",
@@ -81,10 +111,7 @@ const Login = ({ onUserLogin }) => {
         );
       } else if (error.request) {
         // The request was made but no response was received
-        Alert.alert(
-          "Error",
-          `No response received from the server: ${error.request}`
-        );
+        Alert.alert("Error", `No response received from the server: ${error.request}`);
       } else {
         // Something happened in setting up the request that triggered an Error
         Alert.alert("Error", `Network error: ${error.message}`);
@@ -93,6 +120,7 @@ const Login = ({ onUserLogin }) => {
       setLoading(false); // End loading
     }
   };
+  
 
   return (
     <SafeAreaView style={styles.login}>
@@ -182,7 +210,6 @@ const styles = StyleSheet.create({
   textHeader: {
     color: Color.colorPrimary,
     fontSize: FontSize.size_13xl,
-    fontWeight: "800",
     fontFamily: FontFamily.montserratExtraBold,
     textAlign: "center",
   },

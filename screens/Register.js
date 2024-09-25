@@ -5,7 +5,6 @@ import {
   Image,
   Text,
   Alert,
-  ActivityIndicator,
   Dimensions,
   SafeAreaView,
   ScrollView,
@@ -58,7 +57,7 @@ const Register = () => {
       const result = await response.json();
       if (result.success) {
         Alert.alert("Success", result.message);
-        navigation.navigate("LandingScreen"); // Navigate after successful registration
+        navigation.navigate("RegistrationCode", { email: email });
       } else {
         console.log(result);
         Alert.alert("Error", result.message);
@@ -177,7 +176,6 @@ const styles = StyleSheet.create({
   textHeader: {
     color: Color.colorPrimary,
     fontSize: FontSize.size_13xl,
-    fontWeight: "800",
     fontFamily: FontFamily.montserratExtraBold,
     textAlign: "center",
   },

@@ -68,7 +68,6 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.montserratSemiBold,
     color: Color.colorPrimary,
     fontSize: 18,
-    fontWeight: "bold",
     marginBottom: 5,
   },
   label: {

@@ -4,7 +4,7 @@ import { StyleSheet, Pressable, Text, View,Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { FontSize, FontFamily, Color, Padding } from "../GlobalStyles";
 
-const Header = ({ title }) => {
+const Header = ({ title, onBack }) => {
   const navigation = useNavigation();
 
   return (
@@ -12,7 +12,7 @@ const Header = ({ title }) => {
       <View style={styles.logoContainer}>
         <Pressable
           style={styles.backButton}
-          onPress={() => navigation.navigate("Home")}
+          onPress={() => {onBack ? onBack() : navigation.navigate("Home")}}
         >
           <Image
             style={[styles.icon, styles.iconLayout]}
@@ -46,7 +46,6 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: FontSize.size_5xl,
     letterSpacing: 3,
-    fontWeight: "700",
     fontFamily: FontFamily.montserratBold,
     color: Color.schemesOnPrimary,
     textAlign: "center",
