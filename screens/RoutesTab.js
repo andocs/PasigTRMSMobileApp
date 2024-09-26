@@ -10,7 +10,8 @@ import {
   Animated,
   Easing,
   SafeAreaView,
-  StatusBar
+  StatusBar,
+  TextInput
 } from "react-native";
 import { BlurView } from "expo-blur"; // Import BlurView from expo-blur
 import { Ionicons } from "@expo/vector-icons";
@@ -26,6 +27,7 @@ const RoutesTab = () => {
   const [selectedRoute, setSelectedRoute] = useState(null);
   const [modalAnim] = useState(new Animated.Value(0)); // To control the modal's animation
   const [backgroundAnim] = useState(new Animated.Value(0)); // To control the background's opacity
+  const [searchQuery, setSearchQuery] = useState(""); // State for search input
 
   useEffect(() => {
     const fetchRoutes = async () => {
@@ -111,6 +113,10 @@ const RoutesTab = () => {
     );
   }
 
+  const filteredRoutes = routes.filter((route) =>
+    route.route_line.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   const modalTranslateY = modalAnim.interpolate({
     inputRange: [0, 1],
     outputRange: [500, 0], // Slide from below
@@ -136,11 +142,27 @@ const RoutesTab = () => {
       <StatusBar hidden={true} />
       <Header title={"ROUTES"} />
       <View style={[styles.body, styles.containerFlexBox]}>
+        {/* Search Input */}
+        <View style={styles.searchContainer}>
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search Terminals"
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+          />
+          <TouchableOpacity
+            style={styles.searchButton}
+            onPress={() => console.log("Search pressed")}
+          >
+            <Text style={styles.searchButtonText}>Search</Text>
+          </TouchableOpacity>
+        </View>
+
         <ScrollView
           style={{ width: "100%" }}
           contentContainerStyle={{ rowGap: 20 }}
         >
-          {routes.map((route) => (
+          {filteredRoutes.map((route) => (
             <TouchableOpacity
               key={route.id}
               onPress={() => handleRoutePress(route)}
@@ -243,6 +265,32 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     justifyContent: "space-between",
   },
+  searchContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 10,
+  },
+  searchInput: {
+    fontFamily: FontFamily.montserratRegular,
+    flex: 1,
+    height: 40,
+    borderColor: "#ccc",
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    marginRight: 10,
+  },
+  searchButton: {
+    backgroundColor: Color.colorPrimary,
+    borderRadius: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+  },
+  searchButtonText: {
+    fontFamily: FontFamily.montserratBold,
+    color: "white",
+    fontSize: 12,
+  },
   modalContainer: {
     flex: 1,
     justifyContent: "flex-end", // Align to the bottom
@@ -271,55 +319,45 @@ const styles = StyleSheet.create({
   modalTitle: {
     color: Color.colorPrimary,
     fontFamily: FontFamily.montserratBlack,
-    fontSize: 20,
-    marginBottom: 10,
+    fontSize: 24,
   },
   modalText: {
-    color: Color.colorPrimary,
-    fontFamily: FontFamily.montserratMedium,
-    textAlign: "left",
-    fontSize: 14,
-    marginVertical: 5,
+    fontFamily: FontFamily.interRegular,
+    fontSize: 16,
+    marginVertical: 10,
   },
   stopsContainer: {
-    marginVertical: 7,
-    paddingLeft: 10,
+    marginTop: 10,
   },
   stopContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 15, // Increased gap between stops
-    position: "relative",
   },
   bullet: {
-    width: 12, // Increased bullet size
-    height: 12, // Increased bullet size
-    borderRadius: 6,
+    width: 10,
+    height: 10,
+    borderRadius: 5,
     backgroundColor: Color.colorPrimary,
-    marginRight: 15, // Increased gap between bullet and stop text
+    marginRight: 10,
   },
   outlineBullet: {
-    backgroundColor: "white",
     borderWidth: 2,
     borderColor: Color.colorPrimary,
+    backgroundColor: "white",
   },
   stop: {
-    fontFamily: FontFamily.montserratMedium,
+    fontFamily: FontFamily.interMedium,
     fontSize: 14,
-    color: "#555",
   },
   line: {
-    position: "absolute",
-    left: 5.5,
-    top: 14,
     width: 2,
-    height: 26,
-    borderLeftWidth: 2,
-    borderColor: Color.colorPrimary,
-    borderStyle: "dashed",
-    borderDashGap: 4,
-    borderDashWidth: 8,
+    height: "100%",
+    backgroundColor: Color.colorPrimary,
+    position: "absolute",
+    left: 5,
+    top: 0,
   },
 });
+
 
 export default RoutesTab;

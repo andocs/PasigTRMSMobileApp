@@ -2,7 +2,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { useState, useEffect } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { StyleSheet, Text, View, Image, Platform } from "react-native";
+import { StyleSheet, Text, View, Image } from "react-native";
 
 import { useFonts } from "expo-font";
 import { Color, Padding, FontFamily, FontSize } from "./GlobalStyles";
@@ -22,7 +22,6 @@ import ForgotPasswordEmail from "./screens/ForgotPasswordEmail";
 import RegistrationCode from "./screens/RegistrationCode";
 import AnnouncementsScreen from "./screens/AnnouncementsScreen";
 import QRGenerator from "./screens/QRGenerator";
-import SelectLocationScreen from "./screens/SelectLocationScreen";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const Stack = createNativeStackNavigator();
@@ -213,10 +212,6 @@ const App = () => {
               )}
             />
             <Stack.Screen name="MapScreen" component={MapScreen} />
-            <Stack.Screen
-              name="SelectLocationScreen"
-              component={SelectLocationScreen}
-            />
           </Stack.Navigator>
         ) : (
           <Stack.Navigator screenOptions={{ headerShown: false }}>

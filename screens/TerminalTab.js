@@ -11,6 +11,7 @@ import {
   Easing,
   SafeAreaView,
   StatusBar,
+  TextInput
 } from "react-native";
 import { BlurView } from "expo-blur"; // Import BlurView from expo-blur
 import { Ionicons } from "@expo/vector-icons";
@@ -26,6 +27,7 @@ const TerminalTab = () => {
   const [selectedTerminal, setSelectedTerminal] = useState(null);
   const [modalAnim] = useState(new Animated.Value(0)); // To control the modal's animation
   const [backgroundAnim] = useState(new Animated.Value(0)); // To control the background's opacity
+  const [searchQuery, setSearchQuery] = useState(""); // State for search input
 
   useEffect(() => {
     const fetchTerminals = async () => {
@@ -111,6 +113,10 @@ const TerminalTab = () => {
     );
   }
 
+  const filteredTerminals = terminals.filter((terminal) =>
+    terminal.terminal_name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   const modalTranslateY = modalAnim.interpolate({
     inputRange: [0, 1],
     outputRange: [500, 0], // Slide from below
@@ -121,11 +127,27 @@ const TerminalTab = () => {
       <StatusBar hidden={true} />
       <Header title={"TERMINALS"} />
       <View style={[styles.body, styles.containerFlexBox]}>
+        {/* Search Input */}
+        <View style={styles.searchContainer}>
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search Terminals"
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+          />
+          <TouchableOpacity
+            style={styles.searchButton}
+            onPress={() => console.log("Search pressed")}
+          >
+            <Text style={styles.searchButtonText}>Search</Text>
+          </TouchableOpacity>
+        </View>
+
         <ScrollView
           style={{ width: "100%" }}
           contentContainerStyle={{ rowGap: 20 }}
         >
-          {terminals.map((terminal) => (
+          {filteredTerminals.map((terminal) => (
             <TouchableOpacity
               key={terminal.id}
               onPress={() => handleTerminalPress(terminal)}
@@ -143,7 +165,7 @@ const TerminalTab = () => {
 
       {/* Modal for Terminal Details */}
       <Modal
-        animationType="none" // Disable default animation
+        animationType="none"
         transparent={true}
         visible={modalVisible}
         onRequestClose={closeModal}
@@ -246,20 +268,16 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
-    justifyContent: "flex-end", // Align to the bottom
-  },
-  blurContainer: {
-    ...StyleSheet.absoluteFillObject,
-    zIndex: 1,
+    justifyContent: "flex-end",
   },
   absolute: {
     ...StyleSheet.absoluteFillObject,
   },
   modalContent: {
     width: "100%",
-    backgroundColor: "white", // Solid background color for modal content
-    borderTopLeftRadius: Border.br_21xl, // Rounded top corners
-    borderTopRightRadius: Border.br_21xl, // Rounded top corners
+    backgroundColor: "white",
+    borderTopLeftRadius: Border.br_21xl,
+    borderTopRightRadius: Border.br_21xl,
     padding: Padding.p_5xl,
     alignItems: "flex-start",
     zIndex: 2,
@@ -280,7 +298,33 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.montserratMedium,
     textAlign: "left",
     fontSize: 14,
-    marginVertical: 5,
+    marginVertical: 2,
+  },
+  searchContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 10,
+  },
+  searchInput: {
+    fontFamily: FontFamily.montserratRegular,
+    flex: 1,
+    height: 40,
+    borderColor: "#ccc",
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    marginRight: 10,
+  },
+  searchButton: {
+    backgroundColor: Color.colorPrimary,
+    borderRadius: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+  },
+  searchButtonText: {
+    fontFamily: FontFamily.montserratBold,
+    color: "white",
+    fontSize: 12,
   },
 });
 
