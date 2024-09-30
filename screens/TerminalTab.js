@@ -114,7 +114,7 @@ const TerminalTab = () => {
   }
 
   const filteredTerminals = terminals.filter((terminal) =>
-    terminal.terminal_name.toLowerCase().includes(searchQuery.toLowerCase())
+    terminal.route_line.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const modalTranslateY = modalAnim.interpolate({

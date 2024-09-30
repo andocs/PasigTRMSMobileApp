@@ -146,7 +146,7 @@ const RoutesTab = () => {
         <View style={styles.searchContainer}>
           <TextInput
             style={styles.searchInput}
-            placeholder="Search Terminals"
+            placeholder="Search Routes"
             value={searchQuery}
             onChangeText={setSearchQuery}
           />
